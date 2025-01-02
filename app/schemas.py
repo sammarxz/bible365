@@ -1,4 +1,5 @@
-from flask import request
+from functools import wraps
+from flask import request, jsonify
 from marshmallow import Schema, fields, validate, ValidationError
 
 
@@ -25,13 +26,14 @@ class ReadingProgressSchema(Schema):
 
 
 def validate_request(schema_class):
-    def decorator(fn):
+    def decorator(f):
+        @wraps(f)
         def wrapper(*args, **kwargs):
             schema = schema_class()
             try:
                 schema.load(request.get_json())
+                return f(*args, **kwargs)
             except ValidationError as err:
-                return {"error": "Validation error", "messages": err.messages}, 400
-            return fn(*args, **kwargs)
+                return jsonify({"error": "Validation error", "messages": err.messages}), 400
         return wrapper
     return decorator
