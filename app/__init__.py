@@ -3,8 +3,10 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from app.extensions import db, migrate, jwt
 from app.config import config
+from app.utils.limiter import init_limiter
 from app.utils.logging import setup_logging
 from app.utils.errors import register_error_handlers
+from app.utils.middleware import init_middleware
 
 
 def create_app(config_name='development'):
@@ -18,6 +20,8 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    init_limiter(app)
+    init_middleware(app)
 
     register_error_handlers(app)
 

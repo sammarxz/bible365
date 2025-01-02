@@ -4,7 +4,7 @@ from app.models.user import User
 from app.models.bible import Book, Chapter
 from app.models.reading_plan import ReadingPlan, ReadingProgress
 from app.extensions import db, cache
-from app.utils import limiter
+from app.utils.limiter import limiter
 from app.utils.errors import APIError
 from . import auth_bp, bible_bp, reading_plan_bp
 
