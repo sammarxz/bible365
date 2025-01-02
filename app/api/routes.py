@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from app.models.user import User
 from app.models.bible import Book, Chapter
 from app.models.reading_plan import ReadingPlan, ReadingProgress
-from app.extensions import db
+from app.extensions import db, cache
 from . import auth_bp, bible_bp, reading_plan_bp
 
 
@@ -41,6 +41,7 @@ def login():
 
 @bible_bp.route('/books', methods=['GET'])
 @jwt_required()
+@cache.cached(timeout=3600)
 def get_books():
     try:
         current_user = get_jwt_identity()
