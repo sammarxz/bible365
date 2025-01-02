@@ -5,5 +5,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         "flask",
+        "flask-sqlalchemy",
+        "flask-migrate",
+        "flask-jwt-extended",
     ],
 )
