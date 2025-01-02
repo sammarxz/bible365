@@ -1,9 +1,8 @@
 import pytest
 from app import create_app
-from app.extensions import db
+from app.extensions import db, oauth
 from app.models.bible import Book, Chapter
 from app.models.user import User
-from app.extensions import oauth
 
 
 @pytest.fixture
