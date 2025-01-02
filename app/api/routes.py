@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.bible import Book, Chapter
 from app.models.reading_plan import ReadingPlan, ReadingProgress
 from app.extensions import db, cache
+from app.utils import limiter
 from . import auth_bp, bible_bp, reading_plan_bp
 
 
@@ -27,6 +28,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['POST'])
+@limiter.limit("5 per minute")
 def login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
