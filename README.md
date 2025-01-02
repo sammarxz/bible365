@@ -6,6 +6,7 @@ Uma aplicação web para acompanhamento diário de leitura bíblica, desenvolvid
 - [Visão Geral](#visão-geral)
 - [Tecnologias](#tecnologias)
 - [Desenvolvimento](#desenvolvimento)
+- [Documentação](#documentacao)
 - [API](#api)
 - [Testes](#testes)
 - [Deploy](#deploy)
@@ -79,6 +80,27 @@ flask run
 # Modo debug
 flask run --debug
 ```
+
+## Documentação
+
+A documentação da API está disponível via Swagger UI em:
+
+```
+http://localhost:5000/api/docs
+```
+
+Para acessar:
+
+1. Inicie a aplicação
+2. Navegue até `/api/docs` no seu navegador
+3. Explore os endpoints disponíveis
+4. Teste as requisições diretamente pela interface
+
+A documentação inclui:
+- Descrição de todos os endpoints
+- Schemas de request/response
+- Autenticação necessária
+- Exemplos de uso
 
 ## API
 
