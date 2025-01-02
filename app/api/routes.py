@@ -5,6 +5,7 @@ from app.models.bible import Book, Chapter
 from app.models.reading_plan import ReadingPlan, ReadingProgress
 from app.extensions import db, cache
 from app.utils import limiter
+from app.utils.errors import APIError
 from . import auth_bp, bible_bp, reading_plan_bp
 
 
@@ -13,7 +14,7 @@ def register():
     data = request.get_json()
 
     if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email already registered'}), 409
+        raise APIError('Email already registered', status_code=409)
 
     user = User(
         username=data['username'],
@@ -33,12 +34,11 @@ def login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
 
-    if user and user.check_password(data['password']):
-        access_token = create_access_token(
-            identity=str(user.id))  # Convertendo para string
-        return jsonify({'access_token': access_token}), 200
+    if not user or not user.check_password(data['password']):
+        raise APIError('Invalid credentials', status_code=401)
 
-    return jsonify({'error': 'Invalid credentials'}), 401
+    access_token = create_access_token(identity=str(user.id))
+    return jsonify({'access_token': access_token}), 200
 
 
 @bible_bp.route('/books', methods=['GET'])
@@ -46,13 +46,10 @@ def login():
 @cache.cached(timeout=3600)
 def get_books():
     try:
-        current_user = get_jwt_identity()
-        print(f"User ID: {current_user}")  # Debug
         books = Book.query.all()
         return jsonify({'books': [{'id': b.id, 'name': b.name} for b in books]})
     except Exception as e:
-        print(f"Error: {str(e)}")  # Debug
-        return jsonify({'error': str(e)}), 500
+        raise APIError(str(e), status_code=500)
 
 
 @bible_bp.route('/chapters/<int:book_id>', methods=['GET'])

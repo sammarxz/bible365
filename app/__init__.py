@@ -4,6 +4,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from app.extensions import db, migrate, jwt
 from app.config import config
 from app.utils.logging import setup_logging
+from app.utils.errors import register_error_handlers
 
 
 def create_app(config_name='development'):
@@ -17,6 +18,8 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+
+    register_error_handlers(app)
 
     # Swagger config
     SWAGGER_URL = '/api/docs'
