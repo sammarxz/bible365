@@ -3,6 +3,7 @@ from app import create_app
 from app.extensions import db
 from app.models.bible import Book, Chapter
 from app.models.user import User
+from app.extensions import oauth
 
 
 @pytest.fixture
@@ -11,6 +12,14 @@ def app():
     app.config['JWT_SECRET_KEY'] = 'test-key'
 
     with app.app_context():
+        oauth.register(
+            name='google',
+            client_id='test-id',
+            client_secret='test-secret',
+            authorize_url='https://accounts.google.com/o/oauth2/auth',
+            token_url='https://accounts.google.com/o/oauth2/token',
+        )
+
         db.create_all()
 
         book = Book(name='Genesis', chapters=50, testament='Old', order=1)

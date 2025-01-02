@@ -4,3 +4,5 @@ __pycache__/
 .env
 *.db
 logs/
+.coverage
+.pytest_cache

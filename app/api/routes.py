@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, url_for
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app.models.user import User
 from app.models.bible import Book, Chapter
@@ -7,6 +7,7 @@ from app.extensions import db, cache
 from app.utils.limiter import limiter
 from app.utils.errors import APIError
 from . import auth_bp, bible_bp, reading_plan_bp
+from app.extensions import oauth
 
 
 @auth_bp.route('/register', methods=['POST'])
@@ -39,6 +40,32 @@ def login():
 
     access_token = create_access_token(identity=str(user.id))
     return jsonify({'access_token': access_token}), 200
+
+
+@auth_bp.route('/login/google')
+def google_login():
+    return oauth.google.authorize_redirect(
+        redirect_uri=url_for('auth.google_authorized', _external=True)
+    )
+
+
+@auth_bp.route('/login/google/authorized')
+def google_authorized():
+    oauth.google.authorize_access_token()
+    user_info = oauth.google.get('userinfo').json()
+
+    user = User.query.filter_by(email=user_info['email']).first()
+    if not user:
+        user = User(
+            email=user_info['email'],
+            username=user_info.get('name', user_info['email']),
+            oauth_provider='google',
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    access_token = create_access_token(identity=str(user.id))
+    return jsonify({'access_token': access_token})
 
 
 @bible_bp.route('/books', methods=['GET'])
