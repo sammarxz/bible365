@@ -1,6 +1,6 @@
 alembic==1.14.0
 Authlib==1.4.0
--e git+https://github.com/sammarxz/bible365.git@ede1fcb5e428a1f51af06bab3cab4a49bd7ba27a#egg=bible365
+-e git+https://github.com/sammarxz/bible365.git@ad373d8930cb650998dea544eeae2348ef4264ec#egg=bible365
 black==24.10.0
 blinker==1.9.0
 cachelib==0.9.0
@@ -29,6 +29,7 @@ limits==3.14.1
 Mako==1.3.8
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
+marshmallow==3.23.2
 mdurl==0.1.2
 mypy-extensions==1.0.0
 oauthlib==2.1.0

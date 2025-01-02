@@ -8,9 +8,11 @@ from app.utils.limiter import limiter
 from app.utils.errors import APIError
 from . import auth_bp, bible_bp, reading_plan_bp
 from app.extensions import oauth
+from app.schemas import UserSchema, LoginSchema, ReadingProgressSchema, validate_request
 
 
 @auth_bp.route('/register', methods=['POST'])
+@validate_request(UserSchema)
 def register():
     data = request.get_json()
 
@@ -30,6 +32,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['POST'])
+@validate_request(LoginSchema)
 @limiter.limit("5 per minute")
 def login():
     data = request.get_json()
@@ -101,6 +104,7 @@ def create_plan():
 
 @reading_plan_bp.route('/progress', methods=['POST'])
 @jwt_required()
+@validate_request(ReadingProgressSchema)
 def update_progress():
     data = request.get_json()
     progress = ReadingProgress(
