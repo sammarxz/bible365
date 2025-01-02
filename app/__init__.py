@@ -13,9 +13,7 @@ def create_app(config_name='development'):
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    from app.api import auth_bp, bible_bp, reading_plan_bp
-    app.register_blueprint(auth_bp, url_prefix='/api/auth')
-    app.register_blueprint(bible_bp, url_prefix='/api/bible')
-    app.register_blueprint(reading_plan_bp, url_prefix='/api/reading-plan')
+    from app.api import init_app
+    init_app(app)
 
     return app
