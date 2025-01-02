@@ -50,7 +50,7 @@ cp .env.example .env
 
 ### 2. Estrutura do Projeto
 
-```
+```g
 bible365/
 ├── app/
 │   ├── models/      # Modelos do banco de dados
