@@ -6,6 +6,7 @@ from app.config import config
 from app.utils.limiter import init_limiter
 from app.utils.logging import setup_logging
 from app.utils.errors import register_error_handlers
+from app.utils.oauth import init_oauth
 from app.utils.middleware import init_middleware
 
 
@@ -34,6 +35,7 @@ def create_app(config_name="development"):
     oauth.init_app(app)
 
     # Configurar utilitários
+    init_oauth(app)
     setup_logging(app)
     init_limiter(app)
     init_middleware(app)

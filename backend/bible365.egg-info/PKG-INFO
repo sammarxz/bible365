@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: bible365
+Version: 0.0.0
+Requires-Dist: flask
+Requires-Dist: flask-sqlalchemy
+Requires-Dist: flask-migrate
+Requires-Dist: flask-jwt-extended

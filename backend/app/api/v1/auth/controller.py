@@ -1,5 +1,7 @@
 from flask_jwt_extended import create_access_token
+from flask import url_for
 from app.models.user import User
+from app.utils import oauth
 from app.utils.errors import APIError
 from app.extensions import db
 
@@ -33,20 +35,22 @@ class AuthController:
         return {'access_token': access_token}, 200
 
     @staticmethod
-    def google_auth(user_info):
-        user = User.query.filter_by(email=user_info['email']).first()
+    def google_auth():
+        redirect_uri = url_for('auth', _external=True)
+        return oauth.google.authorize_redirect(redirect_uri)
+        # user = User.query.filter_by(email=user_info['email']).first()
 
-        # Se o usuário não existir, criar um novo
-        if not user:
-            user = User(
-                email=user_info['email'],
-                # Usar o nome fornecido ou o email
-                username=user_info.get('name', user_info['email']),
-                oauth_provider='google',
-            )
-            db.session.add(user)
-            db.session.commit()
+        # # Se o usuário não existir, criar um novo
+        # if not user:
+        #     user = User(
+        #         email=user_info['email'],
+        #         # Usar o nome fornecido ou o email
+        #         username=user_info.get('name', user_info['email']),
+        #         oauth_provider='google',
+        #     )
+        #     db.session.add(user)
+        #     db.session.commit()
 
-        access_token = create_access_token(identity=str(user.id))
+        # access_token = create_access_token(identity=str(user.id))
 
-        return {'access_token': access_token}
+        # return {'access_token': access_token}

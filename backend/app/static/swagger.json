@@ -15,7 +15,7 @@
     }
   ],
   "paths": {
-    "/api/auth/register": {
+    "/api/v1/auth/register": {
       "post": {
         "tags": ["Autenticação"],
         "summary": "Registra novo usuário",
@@ -69,7 +69,7 @@
         }
       }
     },
-    "/api/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "tags": ["Autenticação"],
         "summary": "Login do usuário",
@@ -115,7 +115,7 @@
         }
       }
     },
-    "/api/reading-plan/start/{plan_type}": {
+    "/api/v1/reading-plan/start/{plan_type}": {
       "post": {
         "tags": ["Plano de Leitura"],
         "summary": "Inicia um novo plano de leitura",
@@ -163,7 +163,7 @@
         }
       }
     },
-    "/api/reading-plan/current": {
+    "/api/v1/reading-plan/current": {
       "get": {
         "tags": ["Plano de Leitura"],
         "summary": "Obtém o plano atual do usuário",
@@ -245,7 +245,7 @@
         }
       }
     },
-    "/api/reading-plan/complete/{chapter_id}": {
+    "/api/v1/reading-plan/complete/{chapter_id}": {
       "post": {
         "tags": ["Plano de Leitura"],
         "summary": "Marca uma leitura como concluída",
@@ -304,7 +304,7 @@
         }
       }
     },
-    "/api/reading-plan/history": {
+    "/api/v1/reading-plan/history": {
       "get": {
         "tags": ["Plano de Leitura"],
         "summary": "Obtém histórico de leituras do usuário",

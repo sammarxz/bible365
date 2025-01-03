@@ -3,8 +3,22 @@ from app.utils.limiter import limiter
 from .controller import AuthController
 from app.schemas import UserSchema, LoginSchema, validate_request
 from app.extensions import oauth
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.models.user import User
 
 auth_bp = Blueprint('auth', __name__)
+
+
+@auth_bp.route('/me')
+@jwt_required()
+def get_user():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    return jsonify({
+        'id': user.id,
+        'username': user.username,
+        'email': user.email
+    })
 
 
 @auth_bp.route('/register', methods=['POST'])
