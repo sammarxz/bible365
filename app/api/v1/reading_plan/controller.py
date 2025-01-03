@@ -165,7 +165,7 @@ class ReadingPlanController:
         """Retorna histórico de leituras paginado"""
         readings = DailyReading.query.join(ReadingPlan).filter(
             ReadingPlan.user_id == user_id,
-            DailyReading.completed == True
+            DailyReading.completed == True  # noqa: E712
         ).order_by(
             DailyReading.completed_at.desc()
         ).paginate(

@@ -1,5 +1,5 @@
-from datetime import datetime, timezone
 import pytest
+from datetime import datetime, timezone
 from app import create_app
 from app.extensions import db as _db
 from app.models.user import User
