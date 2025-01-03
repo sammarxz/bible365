@@ -1,11 +1,9 @@
 import time
 from flask import app, request, g
-from functools import wraps
 
 
 def timer_middleware():
     def decorator(f):
-        @wraps(f)
         def decorated_function(*args, **kwargs):
             start = time.time()
             response = f(*args, **kwargs)
@@ -30,6 +28,6 @@ def init_middleware(app):
     def after_request(response):
         if hasattr(g, 'start_time'):
             duration = time.time() - g.start_time
-            app.logger.info(f'{request.method} {request.path} {
-                            response.status_code} - {duration:.2f}s')
+            app.logger.info(f'{request.method} {request.path} {response.status_code} - {duration:.2f}s')
+
         return response
