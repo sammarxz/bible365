@@ -115,57 +115,25 @@
         }
       }
     },
-    "/api/bible/books": {
-      "get": {
-        "tags": ["Bíblia"],
-        "summary": "Lista todos os livros",
+    "/api/reading-plan/start/{plan_type}": {
+      "post": {
+        "tags": ["Plano de Leitura"],
+        "summary": "Inicia um novo plano de leitura",
         "security": [
           {
             "bearerAuth": []
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Lista de livros",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "chapters": {
-                        "type": "integer"
-                      },
-                      "testament": {
-                        "type": "string",
-                        "enum": ["Old", "New"]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        }
-      }
-    },
-    "/api/reading-plan": {
-      "post": {
-        "tags": ["Plano de Leitura"],
-        "summary": "Cria novo plano de leitura",
-        "security": [
+        "parameters": [
           {
-            "bearerAuth": []
+            "name": "plan_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["GENESIS_TO_REV"]
+            },
+            "description": "Tipo do plano de leitura"
           }
         ],
         "responses": {
@@ -176,11 +144,241 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Plano criado com sucesso!"
+                    },
+                    "plan_id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário já possui um plano ativo ou tipo de plano inválido"
+          }
+        }
+      }
+    },
+    "/api/reading-plan/current": {
+      "get": {
+        "tags": ["Plano de Leitura"],
+        "summary": "Obtém o plano atual do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do plano atual",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
                     "plan_id": {
                       "type": "integer"
                     },
+                    "current_day": {
+                      "type": "integer"
+                    },
+                    "streak": {
+                      "type": "integer"
+                    },
+                    "start_date": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "last_read_date": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "progress": {
+                      "type": "object",
+                      "properties": {
+                        "total_days": {
+                          "type": "integer"
+                        },
+                        "completed_readings": {
+                          "type": "integer"
+                        },
+                        "total_readings": {
+                          "type": "integer"
+                        },
+                        "percentage": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "todays_readings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "book": {
+                            "type": "string"
+                          },
+                          "chapter": {
+                            "type": "integer"
+                          },
+                          "completed": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum plano ativo encontrado"
+          }
+        }
+      }
+    },
+    "/api/reading-plan/complete/{chapter_id}": {
+      "post": {
+        "tags": ["Plano de Leitura"],
+        "summary": "Marca uma leitura como concluída",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "chapter_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID da leitura a ser marcada como concluída"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leitura marcada como concluída",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
                     "message": {
                       "type": "string"
+                    },
+                    "progress": {
+                      "type": "object",
+                      "properties": {
+                        "total_days": {
+                          "type": "integer"
+                        },
+                        "completed_readings": {
+                          "type": "integer"
+                        },
+                        "total_readings": {
+                          "type": "integer"
+                        },
+                        "percentage": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Leitura não encontrada ou já concluída"
+          }
+        }
+      }
+    },
+    "/api/reading-plan/history": {
+      "get": {
+        "tags": ["Plano de Leitura"],
+        "summary": "Obtém histórico de leituras do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Número da página"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Itens por página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico de leituras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "readings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "book": {
+                            "type": "string"
+                          },
+                          "chapter": {
+                            "type": "integer"
+                          },
+                          "completed_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    },
+                    "current_page": {
+                      "type": "integer"
+                    },
+                    "per_page": {
+                      "type": "integer"
+                    },
+                    "has_next": {
+                      "type": "boolean"
+                    },
+                    "has_prev": {
+                      "type": "boolean"
                     }
                   }
                 }

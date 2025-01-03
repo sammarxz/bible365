@@ -1,4 +1,3 @@
-from flask import session
 from authlib.integrations.flask_client import OAuth
 
 oauth = OAuth()

@@ -7,13 +7,16 @@ class APIError(Exception):
         super().__init__()
         self.message = message
         self.status_code = status_code
-        self.payload = payload
+        super().__init__(self.message)
 
     def to_dict(self):
         rv = dict(self.payload or ())
         rv['message'] = self.message
         rv['status'] = HTTP_STATUS_CODES.get(self.status_code, 'Unknown error')
         return rv
+
+    def __str__(self):
+        return self.message
 
 
 def register_error_handlers(app):

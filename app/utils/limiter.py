@@ -1,9 +1,13 @@
 from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
-limiter = None
+limiter = Limiter(
+    key_func=get_remote_address,
+    storage_uri="memory://",
+    default_limits=["200 per day", "50 per hour"]
+)
 
 
 def init_limiter(app):
-    global limiter
-    limiter = Limiter(app)
+    limiter.init_app(app)
     return limiter

@@ -29,7 +29,7 @@ def create_app(config_name="development"):
     register_error_handlers(app)
 
     # Swagger
-    SWAGGER_URL = "/api/docs"
+    SWAGGER_URL = "/api/v1/docs"
     API_URL = "/static/swagger.json"
     swagger_bp = get_swaggerui_blueprint(
         SWAGGER_URL, API_URL, config={"app_name": "Bible365 API"}
@@ -37,7 +37,7 @@ def create_app(config_name="development"):
     app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL)
 
     # Registrar blueprints
-    from app.api import init_app
-    init_app(app)
+    from app.api.v1 import api_v1
+    app.register_blueprint(api_v1)
 
     return app
