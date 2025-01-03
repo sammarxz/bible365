@@ -1,6 +1,6 @@
 alembic==1.14.0
 Authlib==1.4.0
--e git+https://github.com/sammarxz/bible365.git@ad373d8930cb650998dea544eeae2348ef4264ec#egg=bible365
+-e git+https://github.com/sammarxz/bible365.git@5addacad479ce05ee792dfd44f733f64b35795ff#egg=bible365
 black==24.10.0
 blinker==1.9.0
 cachelib==0.9.0
