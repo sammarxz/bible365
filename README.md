@@ -1,67 +1,70 @@
 # Bible 365
 
-Uma aplicação web para acompanhamento diário de leitura bíblica, desenvolvida com Flask.
+Uma aplicação web completa para acompanhamento diário de leitura bíblica.
 
-## Índice
-- [Visão Geral](#visão-geral)
-- [Tecnologias](#tecnologias)
-- [Funcionalidades](#funcionalidades)
-- [Desenvolvimento](#desenvolvimento)
-- [Documentação](#documentação)
-- [Testes](#testes)
-- [Deploy](#deploy)
-- [Roadmap](#roadmap)
-
-## Visão Geral
+## 🌟 Visão Geral
 
 Bible 365 é uma aplicação web que permite aos usuários:
 - Acompanhar planos de leitura bíblica
-- Registrar progresso diário de leituras
-- Manter uma sequência (streak) de leituras
+- Registrar progresso diário
+- Manter um streak de leituras consecutivas
 - Visualizar estatísticas de progresso
-- Autenticar via email/senha ou Google OAuth
-- Receber lembretes diários
 
-## Tecnologias
+## 🏗️ Arquitetura
 
+O projeto está dividido em duas partes principais:
+
+### Backend (/backend)
+- API REST em Flask
+- Banco de dados PostgreSQL
+- Autenticação JWT
+- Deploy na plataforma Render
+- [Documentação detalhada do backend](./backend/README.md)
+
+### Frontend (/frontend)
+- Interface web em QwikJS
+- Design responsivo
+- PWA (Progressive Web App)
+- Deploy na plataforma Vercel
+
+## 🚀 URLs do Projeto
+
+- **API**: https://bible365-api.onrender.com
+- **Frontend**: https://bible365.vercel.app
+- **Documentação API**: https://bible365-api.onrender.com/api/v1/docs
+
+## 🛠️ Tecnologias
+
+### Backend
 - Python 3.12+
 - Flask 3.0+
 - PostgreSQL 13
 - SQLAlchemy
 - Flask-JWT-Extended
-- Flask-Migrate
-- Flask-Caching
-- Flask-Limiter
-- Pytest
-- Docker
-- GitHub Actions
 
-## Funcionalidades
+### Frontend
+- QwikJS
+- TypeScript
+- TailwindCSS
+- Vite
 
-### Autenticação
-- Registro local com email/senha
-- Login com Google OAuth
-- Tokens JWT para autenticação de API
-- Rate limiting para proteção contra abusos
+## 📝 Pré-requisitos
 
-### Planos de Leitura
-- Plano Gênesis ao Apocalipse em 365 dias
-- Tracking de progresso diário
-- Sistema de streak para leituras consecutivas
-- Histórico de leituras com anotações
-- Estatísticas de progresso
+Para desenvolvimento local você precisará:
 
-### API
-- REST API documentada com Swagger
-- Rate limiting por IP
-- Autenticação via JWT
-- Endpoints para todas as funcionalidades
+- Python 3.12+
+- Node.js 18+
+- PostgreSQL 13+
+- Git
 
-## Desenvolvimento
+## 💻 Desenvolvimento Local
 
-### 1. Setup do Ambiente
+### Backend
 
 ```bash
+# Entrar no diretório do backend
+cd backend
+
 # Criar ambiente virtual
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
@@ -72,119 +75,62 @@ pip install -r requirements.txt
 
 # Configurar variáveis de ambiente
 cp .env.example .env
-```
 
-### 2. Banco de Dados
-
-```bash
-# Setup inicial do banco
-flask db init
-flask db migrate
+# Rodar migrações
 flask db upgrade
-```
 
-### 3. Docker
-
-```bash
-# Desenvolvimento
-docker-compose -f docker-compose.dev.yml up
-
-# Produção
-docker-compose up
-```
-
-### 4. Executar Localmente
-
-```bash
-# Modo desenvolvimento
+# Iniciar servidor de desenvolvimento
 flask run
-
-# Modo debug
-flask run --debug
 ```
 
-## Documentação
-
-A documentação da API está disponível via Swagger UI em:
-
-```
-http://localhost:5000/api/v1/docs
-```
-
-Documentação detalhada da API também está disponível em `/docs/API.md`.
-
-## Testes
+### Frontend
 
 ```bash
-# Executar todos os testes
-pytest
+# Entrar no diretório do frontend
+cd frontend
 
-# Com cobertura
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+```
+
+## 🧪 Testes
+
+### Backend
+
+```bash
+cd backend
 pytest --cov=app tests/
-
-# Testes específicos
-pytest tests/test_auth.py
-pytest tests/test_reading_plans.py
 ```
 
-Principais áreas cobertas pelos testes:
-- Autenticação e registro
-- Planos de leitura
-- Progressão de leituras
-- Validação de dados
-- Middleware e utilitários
-
-## Deploy
-
-### 1. Requisitos
-
-- Python 3.12+
-- PostgreSQL 13+
-- Docker (opcional)
-
-### 2. Produção com Docker
+### Frontend
 
 ```bash
-# Construir imagem
-docker build -t bible365 .
-
-# Executar
-docker compose up
+cd frontend
+npm run test
 ```
 
-### 3. CI/CD com GitHub Actions
+## 📦 Deploy
 
-O projeto utiliza GitHub Actions para:
-- Executar testes automatizados
-- Verificar cobertura de código
-- Garantir qualidade do código
-- Deploy automático em produção
+O deploy é automático através de CI/CD:
 
-## Segurança
+- **Backend**: Push para `main` dispara deploy no Render
+- **Frontend**: Push para `main` dispara deploy na Vercel
 
-- Senhas armazenadas com hash seguro
-- Rate limiting em endpoints sensíveis
-- Proteção contra ataques comuns
-- Validação rigorosa de dados
-- Testes de segurança automatizados
+## 🤝 Contribuindo
 
-## Roadmap
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
-### v1.0 - MVP
-- [x] Sistema básico de autenticação
-- [x] Plano de leitura Gênesis ao Apocalipse
-- [x] API REST documentada
-- [x] Sistema de streaks
-- [x] Testes automatizados
+## 📄 Licença
 
-### v1.1
-- [ ] Suporte a múltiplas versões bíblicas
-- [ ] Sistema de notificações
-- [ ] Compartilhamento de progresso
-- [ ] Página de perfil do usuário
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-### v2.0
-- [ ] App mobile com React Native
-- [ ] Planos de leitura personalizados
-- [ ] Sistema de grupos e comunidades
-- [ ] Integração com redes sociais
+## 📞 Contato
+
+- Link do Projeto: [https://github.com/sammarxz/bible365](https://github.com/sammarxz/bible365)

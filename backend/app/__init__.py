@@ -14,9 +14,20 @@ def create_app(config_name="development"):
     app.config.from_object(config[config_name])
     app.config["CACHE_TYPE"] = "simple"
 
+    # Configurar CORS
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": [
+                "http://localhost:5173",
+                "https://bible365-api.onrender.com/"
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
+
     # Inicializar extensões
     cache.init_app(app)
-    CORS(app)
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
