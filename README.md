@@ -5,32 +5,57 @@ Uma aplicação web para acompanhamento diário de leitura bíblica, desenvolvid
 ## Índice
 - [Visão Geral](#visão-geral)
 - [Tecnologias](#tecnologias)
+- [Funcionalidades](#funcionalidades)
 - [Desenvolvimento](#desenvolvimento)
-- [Documentação](#documentacao)
-- [API](#api)
+- [Documentação](#documentação)
 - [Testes](#testes)
 - [Deploy](#deploy)
+- [Roadmap](#roadmap)
 
 ## Visão Geral
 
 Bible 365 é uma aplicação web que permite aos usuários:
 - Acompanhar planos de leitura bíblica
-- Consultar diferentes versões da Bíblia
-- Registrar anotações e marcadores
-- Compartilhar progresso
+- Registrar progresso diário de leituras
+- Manter uma sequência (streak) de leituras
+- Visualizar estatísticas de progresso
+- Autenticar via email/senha ou Google OAuth
 - Receber lembretes diários
 
 ## Tecnologias
 
-- Python 3.11+
+- Python 3.12+
 - Flask 3.0+
-- PostgreSQL
+- PostgreSQL 13
 - SQLAlchemy
 - Flask-JWT-Extended
 - Flask-Migrate
+- Flask-Caching
+- Flask-Limiter
 - Pytest
 - Docker
 - GitHub Actions
+
+## Funcionalidades
+
+### Autenticação
+- Registro local com email/senha
+- Login com Google OAuth
+- Tokens JWT para autenticação de API
+- Rate limiting para proteção contra abusos
+
+### Planos de Leitura
+- Plano Gênesis ao Apocalipse em 365 dias
+- Tracking de progresso diário
+- Sistema de streak para leituras consecutivas
+- Histórico de leituras com anotações
+- Estatísticas de progresso
+
+### API
+- REST API documentada com Swagger
+- Rate limiting por IP
+- Autenticação via JWT
+- Endpoints para todas as funcionalidades
 
 ## Desenvolvimento
 
@@ -49,26 +74,23 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-### 2. Estrutura do Projeto
-
-```g
-bible365/
-├── app/
-│   ├── models/      # Modelos do banco de dados
-│   ├── api/         # Endpoints da API
-│   ├── services/    # Lógica de negócio
-│   └── utils/       # Utilitários
-├── tests/           # Testes unitários/integração
-└── docs/           # Documentação adicional
-```
-
-### 3. Banco de Dados
+### 2. Banco de Dados
 
 ```bash
-# Criar banco de dados
+# Setup inicial do banco
 flask db init
 flask db migrate
 flask db upgrade
+```
+
+### 3. Docker
+
+```bash
+# Desenvolvimento
+docker-compose -f docker-compose.dev.yml up
+
+# Produção
+docker-compose up
 ```
 
 ### 4. Executar Localmente
@@ -86,80 +108,83 @@ flask run --debug
 A documentação da API está disponível via Swagger UI em:
 
 ```
-http://localhost:5000/api/docs
+http://localhost:5000/api/v1/docs
 ```
 
-Para acessar:
-
-1. Inicie a aplicação
-2. Navegue até `/api/docs` no seu navegador
-3. Explore os endpoints disponíveis
-4. Teste as requisições diretamente pela interface
-
-A documentação inclui:
-- Descrição de todos os endpoints
-- Schemas de request/response
-- Autenticação necessária
-- Exemplos de uso
-
-## API
-
-### Autenticação
-- `POST /api/auth/register` - Registro
-- `POST /api/auth/login` - Login
-- `POST /api/auth/refresh` - Refresh token
-
-### Bíblia
-- `GET /api/bible/versions` - Lista versões
-- `GET /api/bible/books` - Lista livros
-- `GET /api/bible/chapters/{book}` - Lista capítulos
-
-### Plano de Leitura
-- `GET /api/reading-plan/` - Lista planos
-- `POST /api/reading-plan/start` - Inicia plano
-- `PUT /api/reading-plan/progress` - Atualiza progresso
+Documentação detalhada da API também está disponível em `/docs/API.md`.
 
 ## Testes
 
 ```bash
-# Executar testes
+# Executar todos os testes
 pytest
 
 # Com cobertura
 pytest --cov=app tests/
+
+# Testes específicos
+pytest tests/test_auth.py
+pytest tests/test_reading_plans.py
 ```
+
+Principais áreas cobertas pelos testes:
+- Autenticação e registro
+- Planos de leitura
+- Progressão de leituras
+- Validação de dados
+- Middleware e utilitários
 
 ## Deploy
 
-### 1. Docker
+### 1. Requisitos
+
+- Python 3.12+
+- PostgreSQL 13+
+- Docker (opcional)
+
+### 2. Produção com Docker
 
 ```bash
 # Construir imagem
 docker build -t bible365 .
 
-# Executar container
-docker run -p 5000:5000 bible365
+# Executar
+docker compose up
 ```
 
-### 2. CI/CD com GitHub Actions
+### 3. CI/CD com GitHub Actions
 
-- Push na main inicia pipeline
-- Executa testes
-- Análise de código
-- Deploy automático no Heroku/DigitalOcean
+O projeto utiliza GitHub Actions para:
+- Executar testes automatizados
+- Verificar cobertura de código
+- Garantir qualidade do código
+- Deploy automático em produção
 
-### 3. Produção
+## Segurança
 
-Checklist pré-deploy:
-- [ ] Variáveis de ambiente configuradas
-- [ ] Banco de dados migrado
-- [ ] Testes passando
-- [ ] Documentação atualizada
-- [ ] Monitoramento configurado
+- Senhas armazenadas com hash seguro
+- Rate limiting em endpoints sensíveis
+- Proteção contra ataques comuns
+- Validação rigorosa de dados
+- Testes de segurança automatizados
 
 ## Roadmap
 
-- v1.0 - MVP com funcionalidades básicas
-- v1.1 - Suporte a múltiplas versões bíblicas
-- v1.2 - Sistema de notificações
-- v2.0 - App mobile
+### v1.0 - MVP
+- [x] Sistema básico de autenticação
+- [x] Plano de leitura Gênesis ao Apocalipse
+- [x] API REST documentada
+- [x] Sistema de streaks
+- [x] Testes automatizados
+
+### v1.1
+- [ ] Suporte a múltiplas versões bíblicas
+- [ ] Sistema de notificações
+- [ ] Compartilhamento de progresso
+- [ ] Página de perfil do usuário
+
+### v2.0
+- [ ] App mobile com React Native
+- [ ] Planos de leitura personalizados
+- [ ] Sistema de grupos e comunidades
+- [ ] Integração com redes sociais
