@@ -1,6 +1,6 @@
 import { Check, Share2 } from "lucide-react";
 
-import { Reading } from "../../../types";
+import { Reading, READING_TYPE_LABELS } from "../../../types";
 
 interface Props {
   reading: Reading;
@@ -28,26 +28,14 @@ export function DailyReading({ reading, onComplete, onShare }: Props) {
       </div>
 
       <div className="space-y-4">
-        <Section
-          title="Antigo Testamento"
-          content={reading.oldTestament}
-          onShare={() => onShare(reading.oldTestament, "Antigo Testamento")}
-        />
-        <Section
-          title="Novo Testamento"
-          content={reading.newTestament}
-          onShare={() => onShare(reading.newTestament, "Novo Testamento")}
-        />
-        <Section
-          title="Salmos"
-          content={reading.psalms}
-          onShare={() => onShare(reading.psalms, "Salmos")}
-        />
-        <Section
-          title="Provérbios"
-          content={reading.proverbs}
-          onShare={() => onShare(reading.proverbs, "Provérbios")}
-        />
+        {reading.readings.map((section, index) => (
+          <Section
+            key={index}
+            title={READING_TYPE_LABELS[section.type]}
+            content={section.reference}
+            onShare={() => onShare(section.reference, section.type)}
+          />
+        ))}
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
 export interface Reading {
   id: string;
   date: string;
+  oldTestament: string;
+  newTestament: string;
+  psalms: string;
+  proverbs: string;
   readings: DailyReading[];
   completed: boolean;
 }

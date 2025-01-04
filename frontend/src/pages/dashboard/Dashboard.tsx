@@ -9,21 +9,13 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ProgressStats } from "./components/ProgressStats";
 import { useProgress } from "../../hooks/useProgress";
 import { CompleteButton } from "./components/CompleteButton";
-import { SelectedReading, ShareContent, TodayReading } from "../../types";
-
-const READING_TYPE_LABELS = {
-  "old-testament": "Antigo Testamento",
-  "new-testament": "Novo Testamento",
-  psalms: "Salmos",
-  proverbs: "Provérbios",
-} as const;
-
-const READING_TYPE_COLORS = {
-  "old-testament": "bg-blue-50 border-blue-200",
-  "new-testament": "bg-green-50 border-green-200",
-  psalms: "bg-purple-50 border-purple-200",
-  proverbs: "bg-yellow-50 border-yellow-200",
-} as const;
+import {
+  READING_TYPE_COLORS,
+  READING_TYPE_LABELS,
+  SelectedReading,
+  ShareContent,
+  TodayReading,
+} from "../../types";
 
 export function Dashboard() {
   const { completedReadings, completeReading, isCompleted } = useProgress();

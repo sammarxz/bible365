@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import confetti from "canvas-confetti";
 import { Check, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -14,18 +14,6 @@ export function CompleteButton({
 }: CompleteButtonProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
-
-  // useEffect(() => {
-  //   if (showConfirmDialog || showCongrats) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "unset";
-  //   }
-
-  //   return () => {
-  //     document.body.style.overflow = "unset";
-  //   };
-  // }, [showConfirmDialog, showCongrats]);
 
   const playSuccessSound = () => {
     const audio = new Audio("/success.mp3");
@@ -47,10 +35,6 @@ export function CompleteButton({
     throwConfetti();
     setShowCongrats(true);
   };
-
-  useEffect(() => {
-    console.log("Estado showCongrats mudou:", showCongrats);
-  }, [showCongrats]);
 
   if (isCompleted) {
     return (
