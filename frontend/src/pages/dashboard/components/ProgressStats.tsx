@@ -82,7 +82,7 @@ export function ProgressStats({ completedReadings }: ProgressStatsProps) {
                 transition={{ duration: 0.4, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
-                <div className="px-4 space-y-4">
+                <div className="px-4 pb-4 space-y-4">
                   {/* Stats Grid */}
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="bg-[#E5E6E650] border p-4 rounded-lg">
