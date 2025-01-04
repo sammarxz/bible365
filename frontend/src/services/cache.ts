@@ -1,4 +1,5 @@
-const CACHE_NAME = 'bible-readings-cache-v1';
+export const CACHE_NAME = 'bible-readings-cache-v1';
+export const CACHE_DURATION = 24 * 60 * 60 * 1000; 
 
 export async function cacheReading(reference: string, text: string): Promise<void> {
   const cache = await caches.open(CACHE_NAME);

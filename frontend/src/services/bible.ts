@@ -1,36 +1,32 @@
-import { translations } from "./translations";
+import { BibleBook, BibleTranslation } from "../types";
 
 const BASE_URL = "https://bible-api.com";
 
-interface BibleApiResponse {
-  reference: string;
-  text: string;
-  translation_id: string;
-  translation_name: string;
+export async function getBibleBooks(): Promise<BibleBook[]> {
+  try {
+    const response = await fetch(`${BASE_URL}/data/almeida`);
+    const data: BibleTranslation = await response.json();
+    return data.books;
+  } catch (error) {
+    console.error("Error fetching Bible books:", error);
+    throw error;
+  }
 }
 
-export async function getVerse(
-  reference: string,
-  language: "pt-BR" | "en" = "pt-BR"
-): Promise<string> {
+export async function getVerse(reference: string): Promise<string> {
   try {
-    const version = translations.versions[language];
-    const translatedRef = language === "pt-BR" ? reference : reference;
-
     const response = await fetch(
-      `${BASE_URL}/${encodeURIComponent(translatedRef)}?translation=${version}`
+      `${BASE_URL}/${encodeURIComponent(reference)}?translation=almeida`
     );
 
-    console.log('fez request')
-
     if (!response.ok) {
-      throw new Error("Falha ao carregar o texto bíblico");
+      throw new Error("Failed to load Bible text");
     }
 
-    const data: BibleApiResponse = await response.json();
+    const data = await response.json();
     return data.text;
   } catch (error) {
-    console.error("Erro ao buscar versículo:", error);
-    return "Não foi possível carregar o texto bíblico. Por favor, tente novamente.";
+    console.error("Error fetching verse:", error);
+    throw error;
   }
 }

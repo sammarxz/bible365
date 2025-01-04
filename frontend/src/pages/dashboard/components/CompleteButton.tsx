@@ -41,14 +41,10 @@ export function CompleteButton({
   };
 
   const handleComplete = () => {
-    console.log("Iniciando handleComplete");
     setShowConfirmDialog(false);
     onComplete();
-    console.log("Chamando playSuccessSound");
     playSuccessSound();
-    console.log("Chamando throwConfetti");
     throwConfetti();
-    console.log("Setando showCongrats para true");
     setShowCongrats(true);
   };
 
